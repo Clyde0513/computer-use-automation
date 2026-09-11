@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "computer-use-automation"
+version = "0.1.0"
+description = "Computer-use automation contracts and local proxy application"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.8,<3",
+]
+
+[project.optional-dependencies]
+browser = [
+    "playwright>=1.49,<2",
+]
+dev = [
+    "mypy>=1.11,<2",
+    "playwright>=1.49,<2",
+    "pytest>=8,<10",
+    "pytest-asyncio>=0.24,<2",
+    "ruff>=0.8,<1",
+]
+
+[project.scripts]
+cua-proxy = "proxy_app.__main__:main"
+
+[tool.setuptools.packages.find]
+where = [".", "src"]
+include = ["proxy_app*", "cua*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+proxy_app = ["static/*.css"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["docs/prd"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["cua", "proxy_app"]
+mypy_path = "src"
